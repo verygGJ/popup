@@ -13,7 +13,6 @@ class SimplePopup {
       ...options
     }
   }
-
   openPopup() {
     const popupOpenLink = document.querySelectorAll(`.${this.options.popupOpenLink}`);
     const classPopup = document.querySelectorAll(`.${this.options.popupClassName}`);
@@ -27,6 +26,20 @@ class SimplePopup {
       });
     });
   }
+  popupOpenForData() {
+    const popupLink = document.querySelectorAll('.popup-open[data-for]');
+    const fn = (link) => {
+      const popupElementData = document.querySelector(`.${link.dataset.for}`);
+      if (popupElementData) {   
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          popupElementData.classList.toggle(this.options.popupActiveClass);
+          this.holderActive();
+        });
+      }
+    }
+    Array.from(popupLink).forEach(fn); 
+  };
   holderActive() {
     const htmlBlockHollder = document.querySelector(`${this.options.holderBlock}`);
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -70,9 +83,16 @@ class SimplePopup {
     this.holderActive();
     this.holderDestroy();
   }
+  initPopupData() {
+    this.popupCloseButtonClick();
+    this.overlayClickClose();
+    this.holderActive();
+    this.holderDestroy();
+    this.popupOpenForData();
+  }
 }
 
-export default SimplePopup;
+// export default SimplePopup;
 
 // Init popups ------->
 // const initPopup = new SimplePopup({
